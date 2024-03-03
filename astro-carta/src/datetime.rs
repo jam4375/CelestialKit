@@ -123,5 +123,23 @@ mod tests {
         assert_eq!(days, Ok(31));
         let days = days_in_month(12, true);
         assert_eq!(days, Ok(31));
+
+        // Error cases
+        assert_eq!(
+            days_in_month(13, false),
+            Err("Invalid month_id=13".to_string())
+        );
+        assert_eq!(
+            days_in_month(13, true),
+            Err("Invalid month_id=13".to_string())
+        );
+        assert_eq!(
+            days_in_month(0, false),
+            Err("Invalid month_id=0".to_string())
+        );
+        assert_eq!(
+            days_in_month(0, true),
+            Err("Invalid month_id=0".to_string())
+        );
     }
 }
