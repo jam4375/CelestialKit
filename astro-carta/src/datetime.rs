@@ -1,5 +1,8 @@
 mod month;
+pub mod timedelta;
+
+pub use timedelta::TimeDelta;
 
 pub struct DateTime {
-    ticks: i128,
+    duration: TimeDelta,
 }
