@@ -29,6 +29,132 @@ impl TimeDelta {
         TimeDelta { nanoseconds }
     }
 
+    /// Creates a new `TimeDelta` instance representing a certain number of days.
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - A floating-point value representing the number of days.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use astro_carta::datetime::timedelta;
+    /// use astro_carta::datetime::TimeDelta;
+    ///
+    /// let delta = TimeDelta::days(3.5);
+    /// assert_eq!(delta, TimeDelta::new(3 * timedelta::NANOSECONDS_PER_DAY + 12 * timedelta::NANOSECONDS_PER_HOUR))
+    /// ```
+    pub fn days(value: f64) -> Self {
+        TimeDelta {
+            nanoseconds: (value * NANOSECONDS_PER_DAY as f64) as i128,
+        }
+    }
+
+    /// Creates a new `TimeDelta` instance representing a certain number of hours.
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - A floating-point value representing the number of hours.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use astro_carta::datetime::timedelta;
+    /// use astro_carta::datetime::TimeDelta;
+    ///
+    /// let delta = TimeDelta::hours(8.5);
+    /// assert_eq!(delta, TimeDelta::new(8 * timedelta::NANOSECONDS_PER_HOUR + 30 * timedelta::NANOSECONDS_PER_MINUTE))
+    /// ```
+    pub fn hours(value: f64) -> Self {
+        TimeDelta {
+            nanoseconds: (value * NANOSECONDS_PER_HOUR as f64) as i128,
+        }
+    }
+
+    /// Creates a new `TimeDelta` instance representing a certain number of minutes.
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - A floating-point value representing the number of minutes.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use astro_carta::datetime::timedelta;
+    /// use astro_carta::datetime::TimeDelta;
+    ///
+    /// let delta = TimeDelta::minutes(8.5);
+    /// assert_eq!(delta, TimeDelta::new(8 * timedelta::NANOSECONDS_PER_MINUTE + 30 * timedelta::NANOSECONDS_PER_SECOND))
+    /// ```
+    pub fn minutes(value: f64) -> Self {
+        TimeDelta {
+            nanoseconds: (value * NANOSECONDS_PER_MINUTE as f64) as i128,
+        }
+    }
+
+    /// Creates a new `TimeDelta` instance representing a certain number of seconds.
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - A floating-point value representing the number of seconds.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use astro_carta::datetime::timedelta;
+    /// use astro_carta::datetime::TimeDelta;
+    ///
+    /// let delta = TimeDelta::seconds(8.5);
+    /// assert_eq!(delta, TimeDelta::new(8 * timedelta::NANOSECONDS_PER_SECOND + 500 * timedelta::NANOSECONDS_PER_MILLISECOND))
+    /// ```
+    pub fn seconds(value: f64) -> Self {
+        TimeDelta {
+            nanoseconds: (value * NANOSECONDS_PER_SECOND as f64) as i128,
+        }
+    }
+
+    /// Creates a new `TimeDelta` instance representing a certain number of milliseconds.
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - A floating-point value representing the number of milliseconds.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use astro_carta::datetime::timedelta;
+    /// use astro_carta::datetime::TimeDelta;
+    ///
+    /// let delta = TimeDelta::milliseconds(8.5);
+    /// assert_eq!(delta, TimeDelta::new(8 * timedelta::NANOSECONDS_PER_MILLISECOND + 500 * timedelta::NANOSECONDS_PER_MICROSECOND))
+    /// ```
+    pub fn milliseconds(value: f64) -> Self {
+        TimeDelta {
+            nanoseconds: (value * NANOSECONDS_PER_MILLISECOND as f64) as i128,
+        }
+    }
+
+    /// Creates a new `TimeDelta` instance representing a certain number of microseconds.
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - A floating-point value representing the number of microseconds.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use astro_carta::datetime::timedelta;
+    /// use astro_carta::datetime::TimeDelta;
+    ///
+    /// let delta = TimeDelta::microseconds(8.5);
+    /// assert_eq!(delta, TimeDelta::new(8 * timedelta::NANOSECONDS_PER_MICROSECOND + 500))
+    /// ```
+    pub fn microseconds(value: f64) -> Self {
+        TimeDelta {
+            nanoseconds: (value * NANOSECONDS_PER_MICROSECOND as f64) as i128,
+        }
+    }
+
     fn days_component(&self) -> i128 {
         self.nanoseconds.abs() / NANOSECONDS_PER_DAY
     }
