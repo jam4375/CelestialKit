@@ -42,6 +42,48 @@ pub const fn days_in_month(month: u8, is_leap_year: bool) -> Option<u8> {
     }
 }
 
+/// Calculates the cumulative days for the specified month in a given year.
+///
+/// # Arguments
+///
+/// * `month` - The month for which cumulative days are calculated. Should be between 1 and 12 (inclusive).
+/// * `is_leap_year` - A boolean indicating whether the year is a leap year.
+///
+/// # Returns
+///
+/// * `Some(u16)` - The cumulative days up to the specified month in the given year, if the month is valid.
+/// * `None` - If the provided month is not within the valid range (1-12).
+///
+/// # Examples
+///
+/// ```ignore
+/// use crate::astro_carta::datetime::month;
+///
+/// let cumulative_days = month::cummulative_days_for_month(3, false);
+/// assert_eq!(cumulative_days, Some(59));
+///
+/// let cumulative_days_leap_year = month::cummulative_days_for_month(3, true);
+/// assert_eq!(cumulative_days_leap_year, Some(60));
+///
+/// let invalid_month = month::cummulative_days_for_month(13, false);
+/// assert_eq!(invalid_month, None);
+/// ```
+pub const fn cummulative_days_for_month(month: u8, is_leap_year: bool) -> Option<u16> {
+    if month < 1 || month > 12 {
+        return None;
+    }
+
+    if is_leap_year {
+        let cummulative_days_all: [u16; 12] =
+            [0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335];
+        Some(cummulative_days_all[month as usize - 1])
+    } else {
+        let cummulative_days_all: [u16; 12] =
+            [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334];
+        Some(cummulative_days_all[month as usize - 1])
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -125,5 +167,28 @@ mod tests {
         assert_eq!(days_in_month(13, true), None);
         assert_eq!(days_in_month(0, false), None);
         assert_eq!(days_in_month(0, true), None);
+    }
+
+    #[test]
+    fn cummulative_days_for_month_test() {
+        // Check against manual calculation:
+        for is_leap_year in [false, true] {
+            for month in 1..=12 {
+                let mut cumul_days: u16 = 0;
+                for ii in 1..month {
+                    cumul_days += days_in_month(ii, is_leap_year).unwrap() as u16;
+                }
+                assert_eq!(
+                    cummulative_days_for_month(month, is_leap_year),
+                    Some(cumul_days)
+                );
+            }
+        }
+
+        // Error cases:
+        assert_eq!(cummulative_days_for_month(13, false), None);
+        assert_eq!(cummulative_days_for_month(13, true), None);
+        assert_eq!(cummulative_days_for_month(0, false), None);
+        assert_eq!(cummulative_days_for_month(0, true), None);
     }
 }
