@@ -6,13 +6,13 @@ pub struct DateTime {
 ///
 /// # Arguments
 ///
-/// * `month_id` - An integer representing the month (1 for January, 2 for February, etc.).
+/// * `month` - An integer representing the month (1 for January, 2 for February, etc.).
 /// * `is_leap_year` - A boolean indicating whether the year is a leap year or not.
 ///
 /// # Returns
 ///
 /// * `Some(days)` - The number of days in the specified month, considering if it's a leap year.
-/// * `None` - If the `month_id` is not valid (outside the range 1-12).
+/// * `None` - If the `month` is not valid (outside the range 1-12).
 ///
 /// # Examples
 ///
@@ -31,15 +31,15 @@ pub struct DateTime {
 /// let invalid_month = days_in_month(13, false);
 /// assert_eq!(invalid_month, None);
 /// ```
-pub const fn days_in_month(month_id: u8, is_leap_year: bool) -> Option<u8> {
-    let days_in_month = match month_id {
+pub const fn days_in_month(month: u8, is_leap_year: bool) -> Option<u8> {
+    let days_in_month = match month {
         1 | 3 | 5 | 7 | 8 | 10 | 12 => 31,
         2 => 28,
         4 | 6 | 9 | 11 => 30,
         _ => return None,
     };
 
-    if month_id == 2 && is_leap_year {
+    if month == 2 && is_leap_year {
         Some(days_in_month + 1)
     } else {
         Some(days_in_month)
