@@ -174,6 +174,132 @@ impl TimeDelta {
     fn nanoseconds_component(&self) -> i128 {
         self.nanoseconds.abs() % NANOSECONDS_PER_SECOND
     }
+
+    /// Calculates the total number of days represented by the `TimeDelta` instance.
+    ///
+    /// # Returns
+    ///
+    /// The total number of days as a floating-point value.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use astro_carta::datetime::TimeDelta;
+    ///
+    /// let td = TimeDelta::days(1.0);
+    /// assert_eq!(td.total_days(), 1.0);
+    /// ```
+    pub fn total_days(&self) -> f64 {
+        (self.nanoseconds as f64) / (NANOSECONDS_PER_DAY as f64)
+    }
+
+    /// Calculates the total number of hours represented by the `TimeDelta` instance.
+    ///
+    /// # Returns
+    ///
+    /// The total number of hours as a floating-point value.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use astro_carta::datetime::TimeDelta;
+    ///
+    /// let td = TimeDelta::hours(1.0);
+    /// assert_eq!(td.total_hours(), 1.0);
+    /// ```
+    pub fn total_hours(&self) -> f64 {
+        (self.nanoseconds as f64) / (NANOSECONDS_PER_HOUR as f64)
+    }
+
+    /// Calculates the total number of minutes represented by the `TimeDelta` instance.
+    ///
+    /// # Returns
+    ///
+    /// The total number of minutes as a floating-point value.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use astro_carta::datetime::TimeDelta;
+    ///
+    /// let td = TimeDelta::minutes(1.0);
+    /// assert_eq!(td.total_minutes(), 1.0);
+    /// ```
+    pub fn total_minutes(&self) -> f64 {
+        (self.nanoseconds as f64) / (NANOSECONDS_PER_MINUTE as f64)
+    }
+
+    /// Calculates the total number of seconds represented by the `TimeDelta` instance.
+    ///
+    /// # Returns
+    ///
+    /// The total number of seconds as a floating-point value.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use astro_carta::datetime::TimeDelta;
+    ///
+    /// let td = TimeDelta::seconds(1.0);
+    /// assert_eq!(td.total_seconds(), 1.0);
+    /// ```
+    pub fn total_seconds(&self) -> f64 {
+        (self.nanoseconds as f64) / (NANOSECONDS_PER_SECOND as f64)
+    }
+
+    /// Calculates the total number of milliseconds represented by the `TimeDelta` instance.
+    ///
+    /// # Returns
+    ///
+    /// The total number of milliseconds as a floating-point value.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use astro_carta::datetime::TimeDelta;
+    ///
+    /// let td = TimeDelta::milliseconds(1.0);
+    /// assert_eq!(td.total_milliseconds(), 1.0);
+    /// ```
+    pub fn total_milliseconds(&self) -> f64 {
+        (self.nanoseconds as f64) / (NANOSECONDS_PER_MILLISECOND as f64)
+    }
+
+    /// Calculates the total number of microseconds represented by the `TimeDelta` instance.
+    ///
+    /// # Returns
+    ///
+    /// The total number of microseconds as a floating-point value.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use astro_carta::datetime::TimeDelta;
+    ///
+    /// let td = TimeDelta::microseconds(1.0);
+    /// assert_eq!(td.total_microseconds(), 1.0);
+    /// ```
+    pub fn total_microseconds(&self) -> f64 {
+        (self.nanoseconds as f64) / (NANOSECONDS_PER_MICROSECOND as f64)
+    }
+
+    /// Calculates the total number of nanoseconds represented by the `TimeDelta` instance.
+    ///
+    /// # Returns
+    ///
+    /// The total number of nanoseconds as a 128-bit signed integer value.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use astro_carta::datetime::TimeDelta;
+    ///
+    /// let td = TimeDelta::new(1);
+    /// assert_eq!(td.total_nanoseconds(), 1);
+    /// ```
+    pub fn total_nanoseconds(&self) -> i128 {
+        self.nanoseconds
+    }
 }
 
 /// Implements the display trait for TimeDelta.
@@ -486,6 +612,32 @@ mod tests {
                     hours_component, minutes_component, seconds_component, nanoseconds_component
                 )
             );
+        }
+    }
+
+    #[test]
+    fn test_totals() {
+        for value in [-1.0e12, -100.0, -3.14, 0.0, 3.14, 100.0, 1.0e12] {
+            let td = TimeDelta::days(value);
+            assert_eq!(td.total_days(), value);
+
+            let td = TimeDelta::hours(value);
+            assert_eq!(td.total_hours(), value);
+
+            let td = TimeDelta::minutes(value);
+            assert_eq!(td.total_minutes(), value);
+
+            let td = TimeDelta::seconds(value);
+            assert_eq!(td.total_seconds(), value);
+
+            let td = TimeDelta::milliseconds(value);
+            assert_eq!(td.total_milliseconds(), value);
+
+            let td = TimeDelta::microseconds(value);
+            assert_eq!(td.total_microseconds(), value);
+
+            let td = TimeDelta::new(value as i128);
+            assert_eq!(td.total_nanoseconds(), value as i128);
         }
     }
 }
