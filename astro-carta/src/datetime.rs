@@ -11,12 +11,12 @@ pub struct DateTime {
 }
 
 impl DateTime {
-    pub fn new(
-        year: i32,
-        month: i32,
-        day: i32,
-        hour: i32,
-        minute: i32,
+    pub fn from_gregorian(
+        year: i128,
+        month: i128,
+        day: i128,
+        hour: i128,
+        minute: i128,
         second: f64,
     ) -> Option<Self> {
         if !utils::is_valid_year_month_day(year, month, day)
@@ -30,6 +30,7 @@ impl DateTime {
             return None;
         }
 
+        // Compute number of integer days since the implicit epoch of 0001-01-01 00:00:00 TAI
         let prev_year = year - 1;
         let doy = utils::day_of_year(year, month, day)?;
         let abs_days =
@@ -37,9 +38,9 @@ impl DateTime {
 
         Some(DateTime {
             duration: TimeDelta::new(
-                abs_days as i128 * timedelta::NANOSECONDS_PER_DAY
-                    + hour as i128 * timedelta::NANOSECONDS_PER_HOUR
-                    + minute as i128 * timedelta::NANOSECONDS_PER_MINUTE
+                abs_days * timedelta::NANOSECONDS_PER_DAY
+                    + hour * timedelta::NANOSECONDS_PER_HOUR
+                    + minute * timedelta::NANOSECONDS_PER_MINUTE
                     + (second * timedelta::NANOSECONDS_PER_SECOND as f64) as i128,
             ),
         })

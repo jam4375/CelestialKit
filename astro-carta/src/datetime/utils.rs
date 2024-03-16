@@ -1,4 +1,4 @@
-/// Determines whether a given year is a leap year.
+/// Determines whether a given year is a leap year in the proleptic Gregorian calendar.
 ///
 /// # Arguments
 ///
@@ -17,13 +17,14 @@
 /// assert_eq!(is_leap_year(2024), true);
 /// assert_eq!(is_leap_year(2021), false);
 /// ```
-pub fn is_leap_year(year: i32) -> bool {
+pub fn is_leap_year(year: i128) -> bool {
     (((year % 4) == 0) && (year % 100) != 0) || ((year % 400) == 0)
 }
 
 /// Determines if a given year is a valid Gregorian year.
 ///
-/// A valid Gregorian year should be greater than 0 and less than or equal to 10,000.
+/// A valid Gregorian year should be greater than or equal to 1 and less than or equal to 100,000,000,000.
+/// The upper limit is an arbitrary choice that is extremely far into the future and still within the integer precision used.
 ///
 /// # Arguments
 ///
@@ -38,17 +39,17 @@ pub fn is_leap_year(year: i32) -> bool {
 /// ```ignore
 /// assert_eq!(is_valid_year(2024), true);
 /// assert_eq!(is_valid_year(0), false);
-/// assert_eq!(is_valid_year(10001), false);
+/// assert_eq!(is_valid_year(101_000_000_000), false);
 /// ```
-pub fn is_valid_year(year: i32) -> bool {
-    if year < 1 || year > 10_000 {
+pub fn is_valid_year(year: i128) -> bool {
+    if year < 1 || year > 100_000_000_000 {
         return false;
     }
 
     true
 }
 
-/// Checks if the given year and month values form a valid year-month combination.
+/// Checks if the given year and month values form a valid year-month combination in the proleptic Gregorian calendar.
 ///
 /// # Arguments
 ///
@@ -66,7 +67,7 @@ pub fn is_valid_year(year: i32) -> bool {
 /// assert!(!is_valid_year_month(2024, 13));
 /// assert!(!is_valid_year_month(0, 3));
 /// ```
-pub fn is_valid_year_month(year: i32, month: i32) -> bool {
+pub fn is_valid_year_month(year: i128, month: i128) -> bool {
     if !is_valid_year(year) {
         return false;
     }
@@ -78,7 +79,7 @@ pub fn is_valid_year_month(year: i32, month: i32) -> bool {
     true
 }
 
-/// Checks if the provided year, month, and day form a valid date.
+/// Checks if the provided year, month, and day form a valid date in the proleptic Gregorian calendar.
 ///
 /// # Arguments
 ///
@@ -100,7 +101,7 @@ pub fn is_valid_year_month(year: i32, month: i32) -> bool {
 /// assert_eq!(is_valid_year_month_day(2024, 4, 31), false); // Not a valid day in April
 /// assert_eq!(is_valid_year_month_day(2024, 13, 1), false); // Invalid month
 /// ```
-pub fn is_valid_year_month_day(year: i32, month: i32, day: i32) -> bool {
+pub fn is_valid_year_month_day(year: i128, month: i128, day: i128) -> bool {
     if !is_valid_year_month(year, month) {
         return false;
     }
@@ -111,7 +112,7 @@ pub fn is_valid_year_month_day(year: i32, month: i32, day: i32) -> bool {
     }
 
     if let Some(days_in_month) = super::month::days_in_month(month as u8, is_leap_year) {
-        if day > days_in_month as i32 {
+        if day > days_in_month as i128 {
             return false;
         }
     } else {
@@ -121,7 +122,7 @@ pub fn is_valid_year_month_day(year: i32, month: i32, day: i32) -> bool {
     return true;
 }
 
-/// Calculates the day of the year from the given year, month, and day.
+/// Calculates the day of the year from the given year, month, and day in the proleptic Gregorian calendar.
 /// Returns `Some(day_of_year)` if the input is valid, otherwise returns `None`.
 ///
 /// # Arguments
@@ -142,14 +143,14 @@ pub fn is_valid_year_month_day(year: i32, month: i32, day: i32) -> bool {
 /// assert_eq!(day_of_year(2024, 2, 29), Some(60));
 /// assert_eq!(day_of_year(2024, 13, 1), None);
 /// ```
-pub fn day_of_year(year: i32, month: i32, day: i32) -> Option<i32> {
+pub fn day_of_year(year: i128, month: i128, day: i128) -> Option<i128> {
     if !is_valid_year_month_day(year, month, day) {
         return None;
     }
 
     let is_leap_year = is_leap_year(year);
     if let Some(cumul_days) = super::month::cummulative_days_for_month(month as u8, is_leap_year) {
-        Some(day + cumul_days as i32)
+        Some(day + cumul_days as i128)
     } else {
         None
     }
@@ -172,6 +173,7 @@ mod tests {
     fn is_valid_year_test() {
         assert_eq!(is_valid_year(2024), true);
         assert_eq!(is_valid_year(0), false);
+        assert_eq!(is_valid_year(100_000_000_001), false);
     }
 
     #[test]
@@ -181,6 +183,7 @@ mod tests {
         assert_eq!(is_valid_year_month(2024, 0), false);
         assert_eq!(is_valid_year_month(2024, 13), false);
         assert_eq!(is_valid_year_month(0, 12), false);
+        assert_eq!(is_valid_year_month(100_000_000_001, 12), false);
     }
 
     #[test]
@@ -195,6 +198,7 @@ mod tests {
         assert_eq!(is_valid_year_month_day(2024, 13, 1), false);
         assert_eq!(is_valid_year_month_day(2024, -1, 1), false);
         assert_eq!(is_valid_year_month_day(0, 3, 1), false);
+        assert_eq!(is_valid_year_month_day(100_000_000_001, 3, 1), false);
     }
 
     #[test]
