@@ -11,7 +11,7 @@ pub struct DateTime {
 }
 
 impl DateTime {
-    pub fn from_gregorian(
+    pub fn gregorian(
         year: u64,
         month: u8,
         day: u8,
